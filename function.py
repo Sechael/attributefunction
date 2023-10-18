@@ -5,19 +5,21 @@ import math
 def init_array(X):
     array = []
     for _ in range(X):
-        row = []
-        while len(row) < 7:
-            pool = list(range(3, 16))
-            random.shuffle(pool)
-            value = random.choice(pool)
-            if sum(row) + value <= 65:
-                row.append(value)
+        # Generate a list with 7 random values that sum to 65
+        row = random.sample(range(3, 16), 7)
+        # Calculate the remaining points
         remaining_points = 65 - sum(row)
+        # Add the remaining points randomly to the existing values
         while remaining_points > 0:
             index = random.randint(0, 6)
             if row[index] < 15:
                 row[index] += 1
                 remaining_points -= 1
+        # Check if the sum exceeds 65 and subtract points if needed
+        while sum(row) > 65:
+            index = random.randint(0, 6)
+            if row[index] > 3:
+                row[index] -= 1
         # Calculate the average of Dexterity and Intelligence
         average_dex_int = (row[1] + row[3]) // 2
         # Add the average as the 8th column
@@ -25,7 +27,7 @@ def init_array(X):
         array.append(row)
     return array
 
-X = 20
+X = 100  # You can change the number of rows as needed
 array = init_array(X)
 
 # Define the CSV filename
@@ -41,4 +43,4 @@ with open(csv_filename, 'w', newline='') as csvfile:
     for i, row in enumerate(array):
         csv_writer.writerow([i + 1] + row)
 
-print(f"Data has been written to {csv_filename}.")
+print(f"Data for {X} rows has been written to {csv_filename}.")
