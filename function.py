@@ -2,23 +2,28 @@ import random
 import csv
 import math
 
+# Define the maximum and minimum possible scores and point pool
+max_score = 15
+min_score = 3
+point_pool = 65
+
 def init_array(X):
     array = []
     for _ in range(X):
-        # Generate a list with 7 random values that sum to 65
-        row = random.sample(range(3, 16), 7)
+        # Generate a list with 7 random values that sum to point_pool
+        row = random.sample(range(min_score, max_score + 1), 7)
         # Calculate the remaining points
-        remaining_points = 65 - sum(row)
+        remaining_points = point_pool - sum(row)
         # Add the remaining points randomly to the existing values
         while remaining_points > 0:
             index = random.randint(0, 6)
-            if row[index] < 15:
+            if row[index] < max_score:
                 row[index] += 1
                 remaining_points -= 1
-        # Check if the sum exceeds 65 and subtract points if needed
-        while sum(row) > 65:
+        # Check if the sum exceeds point_pool and subtract points if needed
+        while sum(row) > point_pool:
             index = random.randint(0, 6)
-            if row[index] > 3:
+            if row[index] > min_score:
                 row[index] -= 1
         # Calculate the average of Dexterity and Intelligence
         average_dex_int = (row[1] + row[3]) // 2
@@ -27,14 +32,14 @@ def init_array(X):
         array.append(row)
     return array
 
-X = 100  # You can change the number of rows as needed
+X = 10  # You can change the number of rows as needed
 array = init_array(X)
 
 # Define the CSV filename
 csv_filename = 'output.csv'
 
 # Define column labels
-column_labels = ["STR", "DEX", "CON", "INT", "PERC", "WILL", "CHA", "Initative"]
+column_labels = ["STR", "DEX", "CON", "INT", "PERC", "WILL", "CHA", "Average"]
 
 # Write the data to the CSV file with column labels
 with open(csv_filename, 'w', newline='') as csvfile:
