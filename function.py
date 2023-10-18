@@ -32,14 +32,14 @@ def init_array(X):
         array.append(row)
     return array
 
-X = 10  # You can change the number of rows as needed
+X = 100  # You can change the number of rows as needed
 array = init_array(X)
 
 # Define the CSV filename
 csv_filename = 'output.csv'
 
 # Define column labels
-column_labels = ["STR", "DEX", "CON", "INT", "PERC", "WILL", "CHA", "Average"]
+column_labels = ["STR", "DEX", "CON", "INT", "PERC", "WILL", "CHA", "Initative"]
 
 # Write the data to the CSV file with column labels
 with open(csv_filename, 'w', newline='') as csvfile:
