@@ -1,19 +1,64 @@
 import random
 import csv
 import math
-
 import tkinter as tk
 from tkinter import simpledialog
 
-# Create a tkinter window
-root = tk.Tk()
-root.geometry("300x200")
+def get_max_score():
+    max_score = simpledialog.askinteger("Input", "Enter the maximum possible score (e.g., 15): ")
+    if max_score is None:
+        exit_script()
+    if max_score >= 3:
+        return max_score
+    else:
+        return get_max_score()
 
-# Prompt the user for input using tkinter's simpledialog
-max_score = simpledialog.askinteger("Input", "Enter the maximum possible score (e.g., 15):")
-min_score = simpledialog.askinteger("Input", "Enter the minimum possible score (e.g., 3):")
-point_pool = simpledialog.askinteger("Input", "Enter the point pool (e.g., 65):")
-X = simpledialog.askinteger("Input", "Enter the number of rows to generate:")
+def get_min_score(max_score):
+    min_score = simpledialog.askinteger("Input", f"Enter the minimum possible score (e.g., 3 or greater, at least 1 less than the max score {max_score}): ")
+    if min_score is None:
+        exit_script()
+    if min_score >= 3 and min_score < max_score:
+        return min_score
+    else:
+        return get_min_score(max_score)
+
+def get_X():
+    X = simpledialog.askinteger("Input", "Enter the number of rows to generate (1 to 100): ")
+    if X is None:
+        exit_script()
+    if 1 <= X <= 100:
+        return X
+    else:
+        return get_X()
+
+def exit_script():
+    print("User canceled input. Exiting script.")
+    exit()
+
+root = tk.Tk()
+root.withdraw()  # Hide the main tkinter window
+
+# Gather user input for max_score
+max_score = get_max_score()
+
+# Gather user input for min_score (with a lower limit and 1 less than max_score)
+min_score = get_min_score(max_score)
+
+# Define upper and lower bounds for point_pool
+lower_bound = 7 * min_score
+upper_bound = 7 * max_score
+
+# Gather user input for point_pool within specified range
+point_pool = simpledialog.askinteger("Input", f"Enter the point pool ({lower_bound} to {upper_bound}): ")
+if point_pool is None:
+    exit_script()
+while point_pool < lower_bound or point_pool > upper_bound:
+    point_pool = simpledialog.askinteger("Input", f"Point pool must be between {lower_bound} and {upper_bound}. Please enter a valid value: ")
+    if point_pool is None:
+        exit_script()
+
+# Gather user input for X
+X = get_X()
 
 def init_array(X):
     array = []
